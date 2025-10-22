@@ -115,6 +115,8 @@ Make sure to use this only for local testing, and never in production.
 Set `AWS_ENDPOINT_URL=http://localhost.localstack.cloud:4566`. This is the recommended approach as it directly points your AWS client to the LocalStack endpoint.
   - Disable certificate validation (not recommended):
 If the first option isn't feasible, you can disable certificate validation by exporting an empty AWS_CA_BUNDLE variable(`export AWS_CA_BUNDLE=""`).  However, note that this will cause a warning to be raised for every command. You can suppress these warnings by setting the `PYTHONWARNINGS=ignore` environment variable.
+- Transparent endpoint injection involves a combination redirecting requests using DNS and disabling certificate validation for these requests (to avoid issues when using https). Disabling certificate validation only works for processes LocalStack controls, for example Lambda (managed runtimes) and processes LocalStack starts within the LocalStack container. This means that, even whein cases where DNS properly redirects the requests both inside the main LocalStack container and any spawned containers, you may still encounter certificate issues for processes not spawned directly by LocalStack. To avoid this issue, use `AWS_ENDPOINT_URL=http://localhost.localstack.cloud:4566` as an alternative.
+
 
 ## Troubleshooting
 
