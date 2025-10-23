@@ -85,8 +85,8 @@
       "name": "Developing and Testing a Smart Factory Monitoring App with LocalStack",
       "description": "Comprehensive smart factory monitoring application specifically designed to demonstrate LocalStack for Snowflake capabilities for local data cloud development, debugging, and testing",
       "teaser": "snowflake-smart-factory-app-architecture.png",
-      "githubUrl": "https://github.com/localstack-samples/sample-snowflake-smart-factory-app",
-      "services": [],
+      "githubUrl": "https://github.com/localstack-samples/snowflake-smart-factory-app/",
+      "features": ["Native Apps", "External Volumes", "Snowpipe", "User-Defined Functions", "Streams", "Streamlit", "Stages"],
       "integrations": ["Snowflake CLI", "dbt", "S3", "Dagster", "GitHub Actions"],
       "useCases": ["Data Ingestion", "Dashboards", "Data Transformation", "Data Testing"]
     },
@@ -96,7 +96,7 @@
       "description": "Demonstrates how to integrate Apache Polaris with LocalStack for Snowflake and Trino to create a unified data catalog for your data assets for local development and testing.",
       "githubUrl": "https://github.com/localstack-samples/polaris-demo",
       "teaser": "snowflake-polaris-trino-architecture.png",
-      "services": [],
+      "features": ["Polaris Catalog", "Iceberg Tables", "External Volumes"],
       "integrations": ["Trino", "Polaris", "S3"],
       "useCases": ["Data Catalog", "Data Testing", "Metadata Management"]
     }

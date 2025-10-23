@@ -9,12 +9,16 @@ interface Application {
   services: string[];
   integrations: string[];
   useCases: string[];
+  // Snowflake-only
+  features?: string[];
 }
 
 interface FilterState {
   services: string[];
   useCases: string[];
   integrations: string[];
+  // Snowflake-only
+  features: string[];
 }
 
 interface ApplicationsShowcaseProps {
@@ -61,6 +65,16 @@ const ApplicationCard: React.FC<{
             )}
           </div>
         )}
+        {docs === 'snowflake' && (app.features?.length ?? 0) > 0 && (
+          <div className="feature-pills">
+            {(app.features as string[]).slice(0, 10).map((feature) => (
+              <span key={feature} className="feature-pill">{feature}</span>
+            ))}
+            {(app.features as string[]).length > 10 && (
+              <div className="service-more">+{(app.features as string[]).length - 10}</div>
+            )}
+          </div>
+        )}
         <p className="card-description">{app.description}</p>
         
         <div className="card-footer">
@@ -78,11 +92,13 @@ export const ApplicationsShowcase: React.FC<ApplicationsShowcaseProps> = ({
   applications,
   services,
   integrations,
+  docs,
 }) => {
   const [filters, setFilters] = useState<FilterState>({
     services: [],
     useCases: [],
     integrations: [],
+    features: [],
   });
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -93,6 +109,13 @@ export const ApplicationsShowcase: React.FC<ApplicationsShowcaseProps> = ({
     const allServices = new Set(applications.flatMap(app => app.services));
     return Array.from(allServices).sort((a, b) => (services[a] || a).localeCompare(services[b] || b));
   }, [applications, services]);
+
+  const uniqueFeatures = useMemo(() => {
+    const allFeatures = new Set(
+      applications.flatMap(app => (app.features ?? []))
+    );
+    return Array.from(allFeatures).sort();
+  }, [applications]);
 
   const uniqueUseCases = useMemo(() => {
     const allUseCases = new Set(applications.flatMap(app => app.useCases));
@@ -114,13 +137,19 @@ export const ApplicationsShowcase: React.FC<ApplicationsShowcaseProps> = ({
           app.name.toLowerCase().includes(searchLower) ||
           app.description.toLowerCase().includes(searchLower) ||
           app.useCases.some(useCase => useCase.toLowerCase().includes(searchLower)) ||
-          app.services.some(service => (services[service] || service).toLowerCase().includes(searchLower)) ||
+          (docs === 'aws' && app.services.some(service => (services[service] || service).toLowerCase().includes(searchLower))) ||
+          (docs === 'snowflake' && (app.features ?? []).some(feature => feature.toLowerCase().includes(searchLower))) ||
           app.integrations.some(integration => (integrations[integration] || integration).toLowerCase().includes(searchLower));
         if (!matchesSearch) return false;
       }
 
       // Other filters
-      if (filters.services.length > 0 && !filters.services.some(service => app.services.includes(service))) return false;
+      if (docs === 'aws') {
+        if (filters.services.length > 0 && !filters.services.some(service => app.services.includes(service))) return false;
+      } else if (docs === 'snowflake') {
+        const appFeatures = app.features ?? [];
+        if (filters.features.length > 0 && !filters.features.some(feature => appFeatures.includes(feature))) return false;
+      }
       if (filters.useCases.length > 0 && !filters.useCases.some(useCase => app.useCases.includes(useCase))) return false;
       if (filters.integrations.length > 0 && !filters.integrations.some(integration => app.integrations.includes(integration))) return false;
 
@@ -131,7 +160,7 @@ export const ApplicationsShowcase: React.FC<ApplicationsShowcaseProps> = ({
     return filtered.sort((a, b) => {
       return a.name.localeCompare(b.name);
     });
-  }, [applications, filters, searchTerm, sortBy, services, integrations]);
+  }, [applications, filters, searchTerm, sortBy, services, integrations, docs]);
 
   const isSingleResult = filteredApplications.length === 1;
   const gridStyle = useMemo<React.CSSProperties>(() => ({
@@ -153,6 +182,7 @@ export const ApplicationsShowcase: React.FC<ApplicationsShowcaseProps> = ({
       services: [],
       useCases: [],
       integrations: [],
+      features: [],
     });
     setSearchTerm('');
   };
@@ -160,6 +190,7 @@ export const ApplicationsShowcase: React.FC<ApplicationsShowcaseProps> = ({
   const hasActiveFilters = filters.services.length > 0 || 
     filters.useCases.length > 0 || 
     filters.integrations.length > 0 || 
+    filters.features.length > 0 || 
     searchTerm.length > 0;
 
   return (
@@ -406,6 +437,22 @@ export const ApplicationsShowcase: React.FC<ApplicationsShowcaseProps> = ({
           font-size: 0.875rem;
         }
 
+        .feature-pills {
+          display: flex;
+          gap: 0.375rem;
+          flex-wrap: wrap;
+          margin: 0 0 0.75rem 0;
+        }
+
+        .feature-pill {
+          padding: 0.25rem 0.5rem;
+          background: var(--sl-color-bg);
+          border: 1px solid var(--sl-color-gray-6);
+          border-radius: 0.25rem;
+          font-size: 0.75rem;
+          color: var(--sl-color-gray-3);
+        }
+
         .card-footer {
           display: flex;
           justify-content: flex-start;
@@ -562,21 +609,39 @@ export const ApplicationsShowcase: React.FC<ApplicationsShowcaseProps> = ({
               )}
             </div>
             
-            <select 
-              value={filters.services[0] || ''} 
-              onChange={(e) => setFilters(prev => ({ 
-                ...prev, 
-                services: e.target.value ? [e.target.value] : []
-              }))}
-              className="filter-select"
-            >
-              <option value="">Services</option>
-              {uniqueServices.map((service) => (
-                <option key={service} value={service}>
-                  {services[service] || service}
-                </option>
-              ))}
-            </select>
+            {docs === 'aws' ? (
+              <select 
+                value={filters.services[0] || ''} 
+                onChange={(e) => setFilters(prev => ({ 
+                  ...prev, 
+                  services: e.target.value ? [e.target.value] : []
+                }))}
+                className="filter-select"
+              >
+                <option value="">Services</option>
+                {uniqueServices.map((service) => (
+                  <option key={service} value={service}>
+                    {services[service] || service}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <select 
+                value={(filters.features?.[0] as string) || ''} 
+                onChange={(e) => setFilters(prev => ({ 
+                  ...prev, 
+                  features: e.target.value ? [e.target.value] : []
+                }))}
+                className="filter-select"
+              >
+                <option value="">Features</option>
+                {uniqueFeatures.map((feature) => (
+                  <option key={feature} value={feature}>
+                    {feature}
+                  </option>
+                ))}
+              </select>
+            )}
 
             <select 
               value={filters.useCases[0] || ''} 
@@ -629,6 +694,7 @@ export const ApplicationsShowcase: React.FC<ApplicationsShowcaseProps> = ({
               app={app}
               services={services}
               integrations={integrations}
+              docs={docs}
             />
           ))}
           
