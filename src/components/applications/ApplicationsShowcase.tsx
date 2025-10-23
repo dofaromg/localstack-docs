@@ -3,7 +3,8 @@ import React, { useState, useMemo } from 'react';
 interface Application {
   name: string;
   description: string;
-  githubUrl: string;
+  githubUrl?: string;
+  docsUrl?: string;
   teaser: string;
   services: string[];
   integrations: string[];
@@ -20,16 +21,18 @@ interface ApplicationsShowcaseProps {
   applications: Application[];
   services: Record<string, string>;
   integrations: Record<string, string>;
+  docs?: 'aws' | 'snowflake';
 }
 
 const ApplicationCard: React.FC<{ 
   app: Application; 
   services: Record<string, string>;
   integrations: Record<string, string>;
-}> = ({ app, services, integrations }) => {
+  docs?: 'aws' | 'snowflake';
+}> = ({ app, services, integrations, docs }) => {
   return (
     <a 
-      href={app.githubUrl} 
+      href={app.githubUrl || app.docsUrl || '#'} 
       target="_blank" 
       rel="noopener noreferrer" 
       className="app-card"
@@ -43,19 +46,21 @@ const ApplicationCard: React.FC<{
       
       <div className="card-content">
         <h3 className="card-title">{app.name}</h3>
-        <div className="service-icons">
-          {app.services.slice(0, 10).map((serviceCode) => (
-            <div key={serviceCode} className="service-icon" title={services[serviceCode] || serviceCode}>
-              <img
-                src={`/images/aws/${serviceCode}.svg`}
-                alt={services[serviceCode] || serviceCode}
-              />
-            </div>
-          ))}
-          {app.services.length > 10 && (
-            <div className="service-more">+{app.services.length - 10}</div>
-          )}
-        </div>
+        {docs === 'aws' && (
+          <div className="service-icons">
+            {app.services.slice(0, 10).map((serviceCode) => (
+              <div key={serviceCode} className="service-icon" title={services[serviceCode] || serviceCode}>
+                <img
+                  src={`/images/aws/${serviceCode}.svg`}
+                  alt={services[serviceCode] || serviceCode}
+                />
+              </div>
+            ))}
+            {app.services.length > 10 && (
+              <div className="service-more">+{app.services.length - 10}</div>
+            )}
+          </div>
+        )}
         <p className="card-description">{app.description}</p>
         
         <div className="card-footer">

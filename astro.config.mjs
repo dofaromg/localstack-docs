@@ -509,6 +509,10 @@ export default defineConfig({
               autogenerate: { directory: '/snowflake/integrations' },
             },
             {
+              label: 'Sample Apps',
+              slug: 'snowflake/sample-apps',
+            },
+            {
               label: 'Tutorials',
               collapsed: true,
               autogenerate: { directory: '/snowflake/tutorials' },
