@@ -408,16 +408,16 @@
   "iot": {
     "service": "iot",
     "full_name": "IoT (Internet of Things)",
-    "support": "unknown",
+    "support": "supported with limitations",
     "test_suite": false,
-    "limitations": ""
+    "limitations": "MQTT broker state is not persisted"
   },
   "iot-data": {
     "service": "iot-data",
     "full_name": "IoT Data",
-    "support": "unknown",
+    "support": "supported with limitations",
     "test_suite": false,
-    "limitations": ""
+    "limitations": "See IoT limitation"
   },
   "iotanalytics": {
     "service": "iotanalytics",
