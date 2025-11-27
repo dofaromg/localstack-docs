@@ -2,39 +2,62 @@
 import { ApplicationsShowcase } from './applications/ApplicationsShowcase';
 import { getImage } from 'astro:assets';
 
+interface Props { docs?: 'aws' | 'snowflake' }
+const { docs = 'aws' } = Astro.props as Props;
+
 // Import data
 import applicationsData from '../data/developerhub/applications.json';
 import services from '../data/developerhub/services.json';
 import integrations from '../data/developerhub/integrations.json';
 
-const applications = applicationsData.applications;
+const allApplications = applicationsData.applications;
+const applications = allApplications.filter((app: any) => app.docs === docs);
 
-const images = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/images/aws/sample-apps/*.{jpeg,jpg,png,gif}'
+const awsImages = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/aws/sample-apps/*.{jpeg,jpg,png,gif,svg}'
+);
+const snowflakeImages = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/snowflake/sample-apps/*.{jpeg,jpg,png,gif,svg}'
 );
 
 const applicationsUpdated = await Promise.all(
-  applications.map(async (application) => {
+  applications.map(async (application: any) => {
     const updatedApplication = { ...application };
-    const imagePath = `/src/assets/images/aws/sample-apps/${application.teaser}`;
-
-    if (images[imagePath]) {
-      const optimizedLeadImage = await getImage({
-        src: images[imagePath](),
-        format: 'png',
-        width: 800,
-        quality: 90,
-      });
-      updatedApplication.teaser = optimizedLeadImage.src;
+    if (docs === 'aws') {
+      const imagePath = `/src/assets/images/aws/sample-apps/${application.teaser}`;
+      if (awsImages[imagePath]) {
+        const optimizedLeadImage = await getImage({
+          src: awsImages[imagePath](),
+          format: 'png',
+          width: 800,
+          quality: 90,
+        });
+        updatedApplication.teaser = optimizedLeadImage.src;
+      }
+    } else if (docs === 'snowflake') {
+      const teaserName = String(application.teaser || '').split('/').pop();
+      const imagePath = teaserName ? `/src/assets/images/snowflake/sample-apps/${teaserName}` : '';
+      if (teaserName && snowflakeImages[imagePath]) {
+        const optimizedLeadImage = await getImage({
+          src: snowflakeImages[imagePath](),
+          format: 'png',
+          width: 800,
+          quality: 90,
+        });
+        updatedApplication.teaser = optimizedLeadImage.src;
+      } else if (teaserName) {
+        updatedApplication.teaser = `/images/snowflake/sample-apps/${teaserName}`;
+      }
     }
     return updatedApplication;
   })
 );
----
 
+---
 <ApplicationsShowcase
   applications={applicationsUpdated}
   services={services}
   integrations={integrations}
+  docs={docs}
   client:load
 />

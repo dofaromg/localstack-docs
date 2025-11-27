@@ -1,6 +1,7 @@
 {
   "applications": [
     {
+      "docs": "aws",
       "name": "Chaos Testing a Serverless Product Management App with LocalStack",
       "description": "Demonstrates chaos engineering in a multi-region serverless application using API Gateway, Lambda, DynamoDB, and Route53. Test resilience, automated failover, and data integrity with LocalStack's Chaos API.",
       "githubUrl": "https://github.com/localstack-samples/sample-chaos-serverless-multi-region-failover",
@@ -10,6 +11,7 @@
       "useCases": ["Chaos Engineering", "Route53 DNS Failover", "Multi-Region Resiliency"]
     },
     {
+      "docs": "aws",
       "name": "Serverless Image Resizer with Lambda and S3 on LocalStack",
       "description": "A serverless application that automatically resizes images on S3 upload using Lambda. Showcases Lambda hot reloading for rapid development, integration testing, and S3 event-driven architecture on LocalStack.",
       "githubUrl": "https://github.com/localstack-samples/sample-lambda-s3-image-resizer-hot-reload",
@@ -19,6 +21,7 @@
       "useCases": ["Lambda DevX", "Event-Driven Architecture", "Integration Testing"]
     },
     {
+      "docs": "aws",
       "name": "Initializing an RDS Database with AWS CDK and LocalStack",
       "description": "Demonstrates how to initialize and pre-seed an RDS database using AWS CDK and a Lambda custom resource on LocalStack. Highlights Cloud Pods for creating instant, pre-configured database environments.",
       "githubUrl": "https://github.com/localstack-samples/sample-cdk-rds-database-initialization",
@@ -28,6 +31,7 @@
       "useCases": ["Pre-seeding Databases", "Cloud Pods"]
     },
     {
+      "docs": "aws",
       "name": "Real-time Database Replication with DMS and Kinesis on LocalStack",
       "description": "Showcases real-time data replication from RDS (MariaDB) to Kinesis using AWS DMS on LocalStack. Implements both full-load and Change Data Capture (CDC) tasks to stream database changes for analytics.",
       "githubUrl": "https://github.com/localstack-samples/sample-dms-cdc-rds-to-kinesis",
@@ -37,6 +41,7 @@
       "useCases": ["Change Data Capture (CDC)", "Database Migration"]
     },
     {
+      "docs": "aws",
       "name": "Full-Stack Serverless Development with Terraform on LocalStack",
       "description": "A full-stack shipment management app (React, Spring Boot) using S3, Lambda, and DynamoDB. Demonstrates IaC testing with Terraform & Testcontainers and highlights AWS parity for seamless local development on LocalStack.",
       "githubUrl": "https://github.com/localstack-samples/sample-terraform-fullstack-serverless-shipment-app",
@@ -46,6 +51,7 @@
       "useCases": ["IaC Testing", "AWS Parity"]
     },
     {
+      "docs": "aws",
       "name": "Developing and Debugging ECS Fargate Apps with LocalStack",
       "description": "Deploy a containerized Node.js app on ECS Fargate with an ALB using AWS CDK. Showcases ECS code-mounting for hot-reloading and remote debugging capabilities for rapid development cycles on LocalStack.",
       "githubUrl": "https://github.com/localstack-samples/sample-cdk-ecs-fargate-hot-reloading-debugging",
@@ -55,6 +61,7 @@
       "useCases": ["ECS Code-Mounting", "ECS Debugging"]
     },
     {
+      "docs": "aws",
       "name": "Querying a Data Lake on S3 with Athena & Glue on LocalStack",
       "description": "Build and test a data analytics pipeline to query structured data in S3 using Athena and Glue on LocalStack. Demonstrates local Big Data testing and using the Resource Browser for interactive SQL queries.",
       "githubUrl": "https://github.com/localstack-samples/sample-athena-glue-s3-data-lake-query",
@@ -64,6 +71,7 @@
       "useCases": ["Resource Browsers", "Big Data Testing"]
     },
     {
+      "docs": "aws",
       "name": "Developing & testing a Serverless Quiz App with LocalStack",
       "description": "A complete serverless quiz application showcasing the entire LocalStack platform. Demonstrates Cloud Pods, Chaos Engineering, IAM Policy Stream, Ephemeral Instances, and end-to-end integration testing.",
       "githubUrl": "https://github.com/localstack-samples/sample-serverless-quiz-app",
@@ -71,6 +79,26 @@
       "services": ["ddb", "sqs", "lmb", "agw", "sns", "ebr", "stf", "cfr", "s3", "iam"],
       "integrations": ["cdk", "awscli", "boto3"],
       "useCases": ["Resource Browsers", "Integration Testing", "Extensions","Cloud Pods", "Chaos Engineering", "IAM Policy Stream", "Ephemeral Instances"]
+    },
+    {
+      "docs": "snowflake",
+      "name": "Developing and Testing a Smart Factory Monitoring App with LocalStack",
+      "description": "Comprehensive smart factory monitoring application specifically designed to demonstrate LocalStack for Snowflake capabilities for local data cloud development, debugging, and testing",
+      "teaser": "snowflake-smart-factory-app-architecture.png",
+      "githubUrl": "https://github.com/localstack-samples/snowflake-smart-factory-app/",
+      "features": ["Native Apps", "External Volumes", "Snowpipe", "User-Defined Functions", "Streams"],
+      "integrations": ["Snowflake CLI", "dbt", "S3", "Dagster", "GitHub Actions"],
+      "useCases": ["Data Ingestion", "Dashboards", "Data Transformation", "Data Testing"]
+    },
+    {
+      "docs": "snowflake",
+      "name": "Integrating Apache Polaris with LocalStack for Snowflake and Trino",
+      "description": "Demonstrates how to integrate Apache Polaris with LocalStack for Snowflake and Trino to create a unified data catalog for your data assets for local development and testing.",
+      "githubUrl": "https://github.com/localstack-samples/polaris-demo",
+      "teaser": "snowflake-polaris-trino-architecture.png",
+      "features": ["Polaris Catalog", "Iceberg Tables", "External Volumes"],
+      "integrations": ["Trino", "Polaris", "S3"],
+      "useCases": ["Data Catalog", "Data Testing", "Metadata Management"]
     }
   ]
 }
